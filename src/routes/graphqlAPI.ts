@@ -10,16 +10,12 @@ import setup from "../config/setupDB";
 var graphqlHTTP = require("express-graphql");
 var { buildSchema } = require("graphql");
 
-const USE_AUTHENTICATION = false;
+const USE_AUTHENTICATION = true;
 
 (async function setupDB() {
   const client = await setup();
   userFacade.setDatabase(client);
 })();
-
-if (USE_AUTHENTICATION) {
-  router.use(authMiddleware);
-}
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
@@ -55,7 +51,38 @@ const root = {
     });
     return usersDTO;
   },
+  createUser: async (inp: any) => {
+    const { input } = inp;
+    try {
+      const newUser = {
+        name: input.name,
+        userName: input.userName,
+        password: input.password,
+        role: "user",
+      };
+
+      const status = await userFacade.addUser(newUser);
+      return status;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
+
+if (USE_AUTHENTICATION) {
+  router.use(basicAuth);
+}
+
+//Only if we need roles
+// router.use("/", (req: any, res, next) => {
+//   if (USE_AUTHENTICATION) {
+//     const role = req.role;
+//     if (role != "admin") {
+//       throw new ApiError("Not Authorized", 403)
+//     }
+//     next();
+//   }
+// })
 
 router.use(
   "/",

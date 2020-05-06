@@ -2,7 +2,8 @@ var http = require("http");
 var auth = require("basic-auth");
 var compare = require("tsscmp");
 import { Response } from "express";
-import UserFacade from "../facades/user";
+//import UserFacade from "../facades/user
+import UserFacade from "../facades/userFacadeWithDB";
 
 // Create server
 var authMiddleware = async function (req: any, res: Response, next: Function) {
