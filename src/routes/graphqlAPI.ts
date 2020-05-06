@@ -22,22 +22,37 @@ if (USE_AUTHENTICATION) {
 }
 
 // Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
+const schema = buildSchema(`
+  type User {
+    name: String
+    userName: String
+    role: String
+    password: String
+  }
+ 
+  input UserInput {
+    name: String
+    userName: String
+    password: String
+  }
+  
   type Query {
-    hello: String
+    users : [User]!
+  }
+  type Mutation {
+    createUser(input: UserInput): String
   }
 `);
 
 // The root provides a resolver function for each API endpoint
-var root = {
+const root = {
   hello: () => {
     return "Hello world!";
   },
 };
 
-var app = express();
-app.use(
-  "/graphql",
+router.use(
+  "/",
   graphqlHTTP({
     schema: schema,
     rootValue: root,
