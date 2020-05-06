@@ -47,6 +47,9 @@ export default class UserFacade {
     } else throw new ApiError("Requested delete could not be performed", 400);
   }
   //static async getAllUsers(): Promise<Array<IGameUser>> {
+  // Questionmark means proj is optional parameter
+  // Projection determines what it should return
+  // If no projection, just get all
   static async getAllUsers(proj?: object): Promise<Array<any>> {
     const all = userCollection.find({}, { projection: proj });
     return all.toArray();

@@ -46,8 +46,14 @@ const schema = buildSchema(`
 
 // The root provides a resolver function for each API endpoint
 const root = {
-  hello: () => {
-    return "Hello world!";
+  // RESOLVER
+  users: async () => {
+    const users = await userFacade.getAllUsers();
+    const usersDTO = users.map((user) => {
+      const { name, userName, role } = user;
+      return { name, userName, role };
+    });
+    return usersDTO;
   },
 };
 
