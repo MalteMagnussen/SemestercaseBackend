@@ -73,6 +73,22 @@ if (USE_AUTHENTICATION) {
   router.use(basicAuth);
 }
 
+// Only if we need roles - ADMIN - Above auth sets role admin, if admin
+// So GraphQL only works if we're admin, if following middleware is activated.
+// It checks the role from the above middleware, basicauth
+//
+/*
+router.use("/", (req: any, res, next) => {
+  if (USE_AUTHENTICATION) {
+    const role = req.role;
+    if (role != "admin") {
+      throw new ApiError("Not Authorized", 403);
+    }
+    next();
+  }
+});
+*/
+
 //Only if we need roles
 // router.use("/", (req: any, res, next) => {
 //   if (USE_AUTHENTICATION) {
